@@ -8,13 +8,13 @@
               .extern main, exit
               .extern _Zp, _Vsp, _Vfp
 
-              .section programStart ; to be at address 0x801
+              .section programStart, root ; to be at address 0x801
               .word   nextLine
               .word   10            ; line number
               .byte   0x9e, " 2062", 0 ; SYS 2062
 nextLine:     .word   0             ; end of program
 
-              .section startup
+              .section startup, noreorder
               .public __calypsi_entry, __program_start
 
 __calypsi_entry:
