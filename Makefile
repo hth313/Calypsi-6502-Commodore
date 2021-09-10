@@ -4,7 +4,7 @@ VPATH = src
 ALL_LIBS = c64.a
 
 # Common source files
-ASM_SRCS = stub_exit.s stub_putchar.s stub_read.s
+ASM_SRCS = c64startup.s stub_exit.s stub_putchar.s stub_read.s
 C_SRCS = stub_lseek.c stub_write.c stub_close.c
 
 # Object files
