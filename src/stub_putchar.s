@@ -5,7 +5,7 @@ CHROUT:       .equlab 0xffd2
               .section code
               .public _Stub_putchar
 _Stub_putchar:
-#ifdef __NUTSTUDIO_CORE_65C02__
+#ifdef __CALYPSI_CORE_65C02__
               stz     zp:_Zp+1      ; zero extended char, we always succeed
 #else
               lda     #0
