@@ -1,8 +1,12 @@
+              ;; Variant, change attribute value if you make your own
+              .rtmodel cstartup,"c64"
+
               ;; External declarations
               .section cstack
               .section data_init_table
 
               .extern main, exit
+              .extern _Zp, _Vsp, _Vfp
 
               .section programStart ; to be at address 0x801
               .word   nextLine
@@ -11,9 +15,9 @@
 nextLine:     .word   0             ; end of program
 
               .section startup
-              .public __nutstudio_entry, __program_start
+              .public __calypsi_entry, __program_start
 
-__nutstudio_entry:
+__calypsi_entry:
 __program_start:
               lda     #.byte0(.sectionEnd cstack)
               sta     zp:_Vsp
@@ -21,7 +25,7 @@ __program_start:
               sta     zp:_Vsp+1
 
 ;;; Initialize data sections if needed.
-              .section programStart, noreorder
+              .section startup, noreorder
               .public __data_initialization_needed
               .extern __initialize_sections
 __data_initialization_needed:
@@ -35,13 +39,13 @@ __data_initialization_needed:
               sta     zp:_Zp+3
               jsr     __initialize_sections
 
-              .section programStart, noreorder
+              .section startup, noreorder
               .public __call_initialize_global_streams
               .extern __initialize_global_streams
 __call_initialize_global_streams:
               jsr     __initialize_global_streams
 
-              .section programStart, root, noreorder
+              .section startup, root, noreorder
               tsx
               stx     _InitialStack ; for exit()
               lda     #0            ; argc = 0
