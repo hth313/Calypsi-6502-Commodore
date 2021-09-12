@@ -8,16 +8,16 @@
               .extern main, exit
               .extern _Zp, _Vsp, _Vfp
 
-              .section programStart, root ; to be at address 0x801
+              .public __program_root_section, __program_start
+
+              .section programStart, root ; to be at address 0x801 for Commodore 64
+__program_root_section:
               .word   nextLine
               .word   10            ; line number
               .byte   0x9e, " 2062", 0 ; SYS 2062
 nextLine:     .word   0             ; end of program
 
-              .section startup, noreorder
-              .public __calypsi_entry, __program_start
-
-__calypsi_entry:
+              .section startup, root, noreorder
 __program_start:
               lda     #.byte0(.sectionEnd cstack)
               sta     zp:_Vsp
