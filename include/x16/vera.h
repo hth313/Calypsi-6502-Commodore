@@ -1,7 +1,6 @@
 #ifndef __VERA_H__
 #define __VERA_H__
 
-#include <cstdint>
 #include <stdint.h>
 
 typedef struct _VERA VERA_t;
