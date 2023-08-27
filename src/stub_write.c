@@ -1,5 +1,5 @@
 #include <errno.h>
-#include <sys/types.h>
+#include <stddef.h>
 
 #define CHROUT(c) ( (void (*)(char) ) 0xffd2) (c)
 
