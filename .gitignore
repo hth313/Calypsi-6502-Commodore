@@ -1,3 +1,2 @@
 *.a
-obj/*.o
-obj/*.lst
+obj/*
