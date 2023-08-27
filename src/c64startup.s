@@ -1,5 +1,15 @@
-              ;; Variant, change attribute value if you make your own
+              ;; Variant, change attribute value if you make your own.
+	      ;; Here we define one out of variants as this C startup is
+	      ;; shared by multiple target systems.
+#if defined(__CALYPSI_TARGET_SYSTEM_C64__)
               .rtmodel cstartup,"c64"
+#elif defined(__CALYPSI_TARGET_SYSTEM_MEGA65__)
+              .rtmodel cstartup,"mega65"
+#elif defined(__CALYPSI_TARGET_SYSTEM_X16__)
+              .rtmodel cstartup,"x16"
+#else
+#pragme GCC error "--target system not one of C64, MEGA65 or X16"
+#endif
 
               ;; External declarations
               .section cstack
