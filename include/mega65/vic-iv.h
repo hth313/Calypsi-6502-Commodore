@@ -1,8 +1,6 @@
 #ifndef __VIC_IV_H__
 #define __VIC_IV_H__
 
-#include <clang/AST/NestedNameSpecifier.h>
-#include <cstdint>
 #include <stdint.h>
 
 typedef struct _VIC_IV _VIC_IV_t;
@@ -189,7 +187,7 @@ struct _VIC_IV {
   uint8_t disprows;
   union {
     uint8_t bitpbank : 3;
-    uint8_t resv : 1
+    uint8_t resv : 1;
     uint8_t hsyncp : 1;
     uint8_t vsyncp : 1;
     uint8_t debugc : 2;
