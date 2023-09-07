@@ -28,7 +28,11 @@
 __program_root_section:
               .word   nextLine
               .word   10            ; line number
-              .byte   0x9e, " 2062", 0 ; SYS 2062
+#if defined(__CALYPSI_TARGET_SYSTEM_MEGA65__)
+	      .byte   0x9e, " 8206", 0 ; SYS 806
+#else
+	      .byte   0x9e, " 2062", 0 ; SYS 2062
+#endif
 nextLine:     .word   0             ; end of program
 
               .section startup, root, noreorder
