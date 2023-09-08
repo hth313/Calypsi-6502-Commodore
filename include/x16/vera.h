@@ -66,7 +66,7 @@ struct _VERA {
       uint8_t sprites_enable : 1;
       uint8_t current_field : 1;
     };
-    uint8_t dc_video;
+    uint8_t dc_video;                      // DCSEL = 0
 #define OUTPUT_MODE(x)     (((x) & 3))
 #define NTSC_CHROMA_DISABLE_RGB_HV_SYNC 0x04
 #define NTSC_RGB_240P 0x08
@@ -74,47 +74,45 @@ struct _VERA {
 #define LAYER1_ENABLE 0x20
 #define SPRITES_ENABLE 0x40
 #define CURRENT_FIELD  0x80
-  };
-  uint8_t h_scale;
-  uint8_t v_scale;
-  uint8_t border_color;
-  uint8_t h_start;
-  uint8_t h_stop;
-  uint8_t v_start;
-  uint8_t v_stop;
-  uint8_t fx_ctrl;
-  uint8_t fx_tilebase;
-  uint8_t fx_mapbase;
-  uint8_t fx_mult;
-  uint8_t fx_x_incr_l;
-  uint8_t fx_x_incr_h;
-  uint8_t fx_y_incr_l;
-  uint8_t fx_y_incr_h;
-  uint8_t fx_x_pos_l;
-  uint8_t fx_x_pos_h;
-  uint8_t fx_y_pos_l;
-  uint8_t fx_y_pos_h;
-  uint8_t fx_x_pos_s;
-  uint8_t fx_y_pos_s;
-  uint8_t fx_x_poly_fill_l;
-  uint8_t fx_x_poly_fill_h;
-  union {
-    uint8_t fx_cache_l;
-    uint8_t fx_accum_reset;
-    uint8_t dc_ver0;
+    uint8_t h_start;                       // DCSEL = 1
+    uint8_t fx_ctrl;                       // DCSEL = 2
+    uint8_t fx_x_incr_l;                   // DCSEL = 3   (write only)
+    uint8_t fx_x_pos_l;                    // DCSEL = 4   (write only)
+    uint8_t fx_x_pos_s;                    // DCSEL = 5   (write only)
+    uint8_t fx_cache_l;                    // DCSEL = 6   (write only)
+    uint8_t fx_accum_reset;                // DCSEL = 6   (read only)
+    uint8_t dc_ver0;                       // DCSEL = 63  (read only)
   };
   union {
-    uint8_t fx_cache_m;
-    uint8_t fx_accum;
-    uint8_t dc_ver1;
+    uint8_t h_scale;                       // DCSEL = 0
+    uint8_t h_stop;                        // DCSEL = 1
+    uint8_t fx_tilebase;                   // DCSEL = 2   (write only)
+    uint8_t fx_x_incr_h;                   // DCSEL = 3   (write only)
+    uint8_t fx_x_pos_h;                    // DCSEL = 4   (write only)
+    uint8_t fx_y_pos_s;                    // DCSEL = 5   (write only)
+    uint8_t fx_cache_m;                    // DCSEL = 6   (write only)
+    uint8_t fx_accum;                      // DCSEL = 6   (read only)
+    uint8_t dc_ver1;                       // DCSEL = 63  (read only)
   };
   union {
-    uint8_t fx_cache_h;
-    uint8_t dc_ver2;
+    uint8_t v_scale;                       // DCSEL = 0
+    uint8_t v_start;                       // DCSEL = 1
+    uint8_t fx_mapbase;                    // DCSEL = 2   (write only)
+    uint8_t fx_y_incr_l;                   // DCSEL = 3   (write only)
+    uint8_t fx_y_pos_l;                    // DCSEL = 4   (write only)
+    uint8_t fx_x_poly_fill_l;              // DCSEL = 5   (read only)
+    uint8_t fx_cache_h;                    // DCSEL = 6   (write only)
+    uint8_t dc_ver2;                       // DCSEL = 63  (read only)
   };
   union {
-    uint8_t fx_cache_u;
-    uint8_t dc_ver3;
+    uint8_t border_color;                  // DCSEL = 0
+    uint8_t v_stop;                        // DCSEL = 1
+    uint8_t fx_mult;                       // DCSEL = 2   (write only)
+    uint8_t fx_y_incr_h;                   // DCSEL = 3   (write only)
+    uint8_t fx_y_pos_h;                    // DCSEL = 4   (write only)
+    uint8_t fx_x_poly_fill_h;              // DCSEL = 5   (read only)
+    uint8_t fx_cache_u;                    // DCSEL = 6   (write only)
+    uint8_t dc_ver3;                       // DCSEL = 63  (read only)
   };
   struct _VERA_layer layer[2];
   uint8_t audio_ctrl;
