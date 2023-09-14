@@ -3,7 +3,7 @@
 
 #include <stdint.h>
 
-typedef struct _VERA VERA_t;
+typedef struct _VERA _VERA_t;
 
 struct _VERA_layer {
   uint8_t config;
