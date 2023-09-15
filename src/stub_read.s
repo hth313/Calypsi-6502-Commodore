@@ -1,11 +1,16 @@
               .extern _Zp
 
-CHRIN:       .equlab 0xffcf
+CHKIN:	      .equlab 0xffc6
+CHRIN:	      .equlab 0xffcf
 
               .section code
               .public _Stub_read
-_Stub_read:                         ; TODO: handle file descriptor
-              lda     #0            ; set file counter = 0
+_Stub_read:   ldx     zp:_Zp+0
+	      beq     start$	    ; stdin
+	      cpx     #3	    ; test for stdout/stderr
+	      bcs     eof$
+	      jsr     CHKIN	    ; ensure channel is prepared to read
+start$:	      lda     #0	    ; set file counter = 0
               sta     zp:_Zp+0
               sta     zp:_Zp+1
               ldx     zp:_Zp+5      ; 256 or more?
@@ -29,3 +34,7 @@ _Stub_read:                         ; TODO: handle file descriptor
               iny
               bne     25$
 30$:          rts
+eof$:	      lda     #-1
+	      sta     zp:_Zp+0
+	      sta     zp:_Zp+1
+	      rts
