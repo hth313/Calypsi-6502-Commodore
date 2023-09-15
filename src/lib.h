@@ -1,6 +1,8 @@
 #ifndef __COMMODORE_LIB_H__
 #define __COMMODORE_LIB_H__
 
+#include <stdint.h>
+
 extern uint8_t __fd_resources;
 
 extern void __set_filename(const char *, uint8_t len);
