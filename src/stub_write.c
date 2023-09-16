@@ -1,5 +1,6 @@
 #include <errno.h>
 #include <stddef.h>
+#include <stdio.h>
 #include "lib.h"
 
 #define CHROUT(c) ( (void (*)(char) ) 0xffd2) (c)
@@ -31,5 +32,9 @@ size_t _Stub_write (int fd, const void *buf, size_t count) {
       __set_errno(EBADF);
       return (size_t) -1;
   }
-  return n;
+  if (__read_status()) {
+      return EOF;
+  } else {
+      return n;
+  }
 }

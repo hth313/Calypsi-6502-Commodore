@@ -3,6 +3,12 @@
 
 #include <stdint.h>
 
+typedef void (*__open_t)(void);
+typedef uint8_t (*__read_status_t)(void);
+
+#define __read_status  ((__read_status_t)0xffb7)
+#define __open  ((__open_t)0xffc0)
+
 extern uint8_t __fd_resources;
 
 extern void __set_filename(const char *, uint8_t len);

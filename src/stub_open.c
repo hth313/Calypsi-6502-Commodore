@@ -7,9 +7,6 @@
 
 uint8_t __fd_resources;
 
-typedef void (*__open)(void);
-typedef uint8_t (*__read_status)(void);
-
 int _Stub_open(const char *path, int oflag, ...) {
   if (__fd_resources == 255) {
     // All resource busy
@@ -47,21 +44,20 @@ int _Stub_open(const char *path, int oflag, ...) {
     __fd_resources |= r;
     __set_logical_file(fd, device, 255);
     __set_filename(path, strlen(path));
-    ((__open)0xffc0)();
-    if (((__read_status)0xffb7)()) {
-      // Open failed
-      _Stub_close(fd);
-      return EOF;
-    }
+    __open();
     if ((oflag & O_WROK)) {
       __chkout(fd);
     }
     if ((oflag & O_RDOK)) {
       __chkin(fd);
     }
-    return fd;
-  } else {
-    // no filename given
-    return EOF;
+    // Finally check if something might have gone wrong
+    if (__read_status() == 0) {
+      return fd;
+    } else {
+      // Some problem, close the file.
+      _Stub_close(fd);
+    }
   }
+  return EOF;
 }
