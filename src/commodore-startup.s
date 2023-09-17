@@ -5,10 +5,10 @@
               .rtmodel cstartup,"c64"
 #elif defined(__CALYPSI_TARGET_SYSTEM_MEGA65__)
               .rtmodel cstartup,"mega65"
-#elif defined(__CALYPSI_TARGET_SYSTEM_X16__)
-              .rtmodel cstartup,"x16"
+#elif defined(__CALYPSI_TARGET_SYSTEM_CX16__)
+              .rtmodel cstartup,"cx16"
 #else
-#pragme GCC error "--target system not one of C64, MEGA65 or X16"
+#pragma GCC error "--target system not one of C64, MEGA65 or X16"
 #endif
 
 	      .rtmodel version, "1"
