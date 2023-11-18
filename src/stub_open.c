@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <fcntl.h>
 #include <calypsi/stubs.h>
+#include <calypsi/intrinsics6502.h>
 #include "lib.h"
 
 uint8_t __fd_resources;
@@ -10,7 +11,6 @@ uint8_t __fd_resources;
 int _Stub_open(const char *path, int oflag, ...) {
   if (__fd_resources == 255) {
     // All resource busy
-
     return EOF;
   }
   char x1 = path[0];
@@ -41,16 +41,14 @@ int _Stub_open(const char *path, int oflag, ...) {
       fd++;
       r <<= 1;
     }
+
     __fd_resources |= r;
     __set_logical_file(fd, device, 255);
     __set_filename(path, strlen(path));
-    __open();
-    if ((oflag & O_WROK)) {
-      __chkout(fd);
+    if (__kernel_call_failed(__open())) {
+      return EOF;
     }
-    if ((oflag & O_RDOK)) {
-      __chkin(fd);
-    }
+
     // Finally check if something might have gone wrong
     if (__read_status() == 0) {
       return fd;

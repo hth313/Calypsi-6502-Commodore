@@ -1,6 +1,7 @@
 #include <errno.h>
 #include <stddef.h>
 #include <stdio.h>
+#include <calypsi/intrinsics6502.h>
 #include "lib.h"
 
 #define CHROUT(c) ( (void (*)(char) ) 0xffd2) (c)
@@ -14,7 +15,11 @@ size_t _Stub_write (int fd, const void *buf, size_t count) {
     if (((1 << (fd - 3)) & __fd_resources) == 0) {
       goto bad;
     }
-    __chkout(fd);  // prepare for output
+    return count;
+    // prepare for output
+    if (__kernel_call_failed(__chkout(fd))) {
+      return EOF;
+    }
     // fall through
   case 2:
   case 1: {
@@ -33,8 +38,8 @@ size_t _Stub_write (int fd, const void *buf, size_t count) {
       return (size_t) -1;
   }
   if (__read_status()) {
-      return EOF;
+    return EOF;
   } else {
-      return n;
+    return n;
   }
 }
