@@ -41,6 +41,7 @@ __program_start:
               sta     zp:_Vsp
               lda     #.byte1(.sectionEnd cstack)
               sta     zp:_Vsp+1
+              jsr     __low_level_init
 
 ;;; Initialize data sections if needed.
               .section startup, noroot, noreorder
@@ -90,6 +91,20 @@ __call_heap_initialize:
               sta     zp:_Zp+1
               jsr     main
               jmp     exit
+
+;;; ***************************************************************************
+;;;
+;;; __low_level_init - custom low level initialization
+;;;
+;;; This default routine just returns doing nothing. You can provide your own
+;;; routine, either in C or assembly for doing custom low leve initialization.
+;;;
+;;; ***************************************************************************
+
+              .section code
+              .pubweak __low_level_init
+__low_level_init:
+              rts
 
 ;;; ***************************************************************************
 ;;;
