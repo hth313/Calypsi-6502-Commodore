@@ -24,6 +24,19 @@
 
 	      .pubweak __program_root_section, __program_start
 
+#if defined(__CALYPSI_CODE_MODEL_BANKED__)
+	      .extern _JmpInline24
+call:	      .macro  dest
+	      jsr     _JmpInline24
+	      .word   .mmuslot5 \dest
+	      .byte   .mmubank \dest
+	      .endm
+#else
+call:	      .macro  dest
+	      jsr     \dest
+	      .endm
+#endif
+
               .section programStart, root ; to be at address 0x801 for Commodore 64
 __program_root_section:
               .word   nextLine
@@ -56,13 +69,13 @@ __data_initialization_needed:
               sta     zp:_Zp+2
               lda     #.byte1 (.sectionEnd data_init_table)
               sta     zp:_Zp+3
-              jsr     __initialize_sections
+	      call    __initialize_sections
 
               .section startup, noroot, noreorder
               .pubweak __call_initialize_global_streams
               .extern __initialize_global_streams
 __call_initialize_global_streams:
-              jsr     __initialize_global_streams
+	      call    __initialize_global_streams
 
 ;;; **** Initialize heap if needed.
               .section startup, noroot, noreorder
@@ -81,7 +94,7 @@ __call_heap_initialize:
               sta     zp:_Zp+4
               lda     #.byte1 (.sectionSize heap)
               sta     zp:_Zp+5
-              jsr     __heap_initialize
+	      call    __heap_initialize
 
               .section startup, root, noreorder
               tsx
@@ -89,8 +102,14 @@ __call_heap_initialize:
               lda     #0            ; argc = 0
               sta     zp:_Zp
               sta     zp:_Zp+1
+#ifdef __CALYPSI_CODE_MODEL_BANKED__
+	      call    main
+	      call    exit
+	      rts
+#else
               jsr     main
               jmp     exit
+#endif
 
 ;;; ***************************************************************************
 ;;;
