@@ -7,4 +7,11 @@
     (memory stackPage (address (#x100 . #x1ff)) (type ram))
     (memory VRAM (address (#x00000 . #x1ffff))
 	    (section zvram vram))
+    (memory bankSlotRAM
+	    (address (#xa000 . #xbfff))
+	    (scatter-to RAM-banks)
+	    :generate-instances
+	    (section bankedcode))
+    (memory bankedRAM (address (#x2000 . #x1fffff))
+	    (section RAM-banks))
     ))
