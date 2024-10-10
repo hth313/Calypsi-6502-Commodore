@@ -37,13 +37,16 @@ int _Stub_open(const char *path, int oflag, ...) {
     // Allocate a file descriptor
     uint8_t fd = 3;
     uint8_t r = 1;
-    while ((__fd_resources & r)) {
+    while ((__fd_resources & r) && (fd < 15)) {
       fd++;
       r <<= 1;
     }
+    if (fd == 15) {
+      return EOF;
+    }
 
     __fd_resources |= r;
-    __set_logical_file(fd, device, 255);
+    __set_logical_file(fd, device, fd);
     __set_filename(path, strlen(path));
     if (__kernel_call_failed(__open())) {
       return EOF;
