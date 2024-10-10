@@ -5,6 +5,7 @@
 #include "lib.h"
 
 #define CHROUT(c) ( (void (*)(char) ) 0xffd2) (c)
+#define CLRCHN() ( (void (*)() ) 0xffcc)()
 
 size_t _Stub_write (int fd, const void *buf, size_t count) {
   const char *p = buf;
@@ -15,7 +16,6 @@ size_t _Stub_write (int fd, const void *buf, size_t count) {
     if (((1 << (fd - 3)) & __fd_resources) == 0) {
       goto bad;
     }
-    return count;
     // prepare for output
     if (__kernel_call_failed(__chkout(fd))) {
       return EOF;
@@ -38,8 +38,10 @@ size_t _Stub_write (int fd, const void *buf, size_t count) {
       return (size_t) -1;
   }
   if (__read_status()) {
+    CLRCHN();
     return EOF;
   } else {
+    CLRCHN();
     return n;
   }
 }

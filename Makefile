@@ -4,8 +4,8 @@ VPATH = src
 ALL_LIBS = c64.a
 
 # Common source files
-ASM_SRCS = c64startup.s stub_exit.s stub_putchar.s stub_read.s
-C_SRCS = stub_lseek.c stub_write.c stub_close.c
+ASM_SRCS = commodore-startup.s stub_exit.s stub_read.s kernal.s
+C_SRCS = stub_lseek.c stub_write.c stub_close.c stub_open.c
 
 # Object files
 OBJS = $(ASM_SRCS:%.s=%.o) $(C_SRCS:%.c=%.o)
