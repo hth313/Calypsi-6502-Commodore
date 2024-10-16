@@ -11,10 +11,10 @@ C_SRCS = stub_lseek.c stub_write.c stub_close.c stub_open.c
 OBJS = $(ASM_SRCS:%.s=%.o) $(C_SRCS:%.c=%.o)
 
 %.o: %.s
-	as6502 --core=45gs02 --list-file=$(@:%.o=obj/%.lst) -o obj/$@ $<
+	as6502 --core=6502 --list-file=$(@:%.o=obj/%.lst) -o obj/$@ $<
 
 %.o: %.c
-	cc6502 --core=45gs02 -O2 --list-file=$(@:%.o=obj/%.lst) -o obj/$@ $<
+	cc6502 --core=6502 -O2 --list-file=$(@:%.o=obj/%.lst) -o obj/$@ $<
 
 all: $(ALL_LIBS)
 

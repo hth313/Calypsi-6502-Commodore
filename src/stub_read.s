@@ -9,10 +9,10 @@ CLRCHN:     .equlab 0xffcc
             .public _Stub_read
 _Stub_read: ldx     zp:_Zp+0
             beq     start$	    ; stdin
-	        cpx     #3	    ; test for stdout/stderr
+            cpx     #3	    ; test for stdout/stderr
             bcc     eof$
-	        jsr     CHKIN	    ; ensure channel is prepared to read
-start$:	    lda     #0	    ; set file counter = 0
+            jsr     CHKIN	    ; ensure channel is prepared to read
+start$:     lda     #0	    ; set file counter = 0
             sta     zp:_Zp+0
             sta     zp:_Zp+1
             lda     zp:_Zp+4
@@ -51,10 +51,10 @@ start$:	    lda     #0	    ; set file counter = 0
             bne     30$
             iny
             bne     25$
-30$:	    jsr     CLRCHN
-	        beq     done$
-eof$:	    jsr     CLRCHN
+30$:        jsr     CLRCHN
+            beq     done$
+eof$:       jsr     CLRCHN
             lda     #0
-	        sta     zp:_Zp+0
-	        sta     zp:_Zp+1
-done$:	    rts
+            sta     zp:_Zp+0
+            sta     zp:_Zp+1
+done$:      rts
