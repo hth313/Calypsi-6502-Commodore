@@ -1,18 +1,18 @@
             .extern _Zp
 
-CHKIN:	    .equlab 0xffc6
-CHRIN:	    .equlab 0xffcf
-READST:	    .equlab 0xffb7
+CHKIN:      .equlab 0xffc6
+CHRIN:      .equlab 0xffcf
+READST:     .equlab 0xffb7
 CLRCHN:     .equlab 0xffcc
 
             .section code
             .public _Stub_read
 _Stub_read: ldx     zp:_Zp+0
-            beq     start$	    ; stdin
-            cpx     #3	    ; test for stdout/stderr
+            beq     start$        ; stdin
+            cpx     #3            ; test for stdout/stderr
             bcc     eof$
-            jsr     CHKIN	    ; ensure channel is prepared to read
-start$:     lda     #0	    ; set file counter = 0
+            jsr     CHKIN         ; ensure channel is prepared to read
+start$:     lda     #0            ; set file counter = 0
             sta     zp:_Zp+0
             sta     zp:_Zp+1
             lda     zp:_Zp+4
@@ -52,9 +52,9 @@ start$:     lda     #0	    ; set file counter = 0
             iny
             bne     25$
 30$:        jsr     CLRCHN
-            beq     done$
+            rts     
 eof$:       jsr     CLRCHN
             lda     #0
             sta     zp:_Zp+0
             sta     zp:_Zp+1
-done$:      rts
+            rts
