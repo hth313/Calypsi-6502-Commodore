@@ -4,14 +4,14 @@
 #include <fcntl.h>
 #include <calypsi/stubs.h>
 #include <calypsi/intrinsics6502.h>
+#include <errno.h>
 #include "lib.h"
 
 uint8_t __fd_resources;
 
 int _Stub_open(const char *path, int oflag, ...) {
   if (__fd_resources == 255) {
-    // All resource busy
-    return EOF;
+    return -ENOSR;
   }
   char x1 = path[0];
   uint8_t device = 8;
@@ -31,7 +31,7 @@ int _Stub_open(const char *path, int oflag, ...) {
       // Do not allow opening keyboard or screen, they are
       // already stdin and stdout.
 
-      return EOF;
+      return -EINVAL;
     }
 
     // Allocate a file descriptor
@@ -42,14 +42,14 @@ int _Stub_open(const char *path, int oflag, ...) {
       r <<= 1;
     }
     if (fd == 15) {
-      return EOF;
+      return -ENOSR;
     }
 
     __fd_resources |= r;
     __set_logical_file(fd, device, fd);
     __set_filename(path, strlen(path));
     if (__kernel_call_failed(__open())) {
-      return EOF;
+      return -EIO;
     }
 
     // Finally check if something might have gone wrong
@@ -60,5 +60,5 @@ int _Stub_open(const char *path, int oflag, ...) {
       _Stub_close(fd);
     }
   }
-  return EOF;
+  return -EIO;
 }

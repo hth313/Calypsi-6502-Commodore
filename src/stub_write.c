@@ -18,7 +18,7 @@ size_t _Stub_write (int fd, const void *buf, size_t count) {
     }
     // prepare for output
     if (__kernel_call_failed(__chkout(fd))) {
-      return EOF;
+      return -EIO;
     }
     // fall through
   case 2:
@@ -34,12 +34,11 @@ size_t _Stub_write (int fd, const void *buf, size_t count) {
     }
     case 0:
     bad:
-      __set_errno(EBADF);
-      return (size_t) -1;
+      return -EBADF;
   }
   if (__read_status()) {
     CLRCHN();
-    return EOF;
+    return -EIO;
   } else {
     CLRCHN();
     return n;
