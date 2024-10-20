@@ -1,5 +1,8 @@
             .extern _Zp
 
+;;; Borrowed from errno.h
+#define EBADF 9
+
 CHKIN:      .equlab 0xffc6
 CHRIN:      .equlab 0xffcf
 READST:     .equlab 0xffb7
@@ -10,8 +13,13 @@ CLRCHN:     .equlab 0xffcc
 _Stub_read: ldx     zp:_Zp+0
             beq     start$        ; stdin
             cpx     #3            ; test for stdout/stderr
-            bcc     eof$
-            jsr     CHKIN         ; ensure channel is prepared to read
+            bcs     5$
+            lda     #.byte0 (-EBADF)
+            sta     zp:_Zp+0
+            lda     #.byte1 (-EBADF)
+            sta     zp:_Zp+1
+            rts
+5$:         jsr     CHKIN           ; ensure channel is prepared to read
 start$:     lda     #0            ; set file counter = 0
             sta     zp:_Zp+0
             sta     zp:_Zp+1
@@ -51,8 +59,7 @@ start$:     lda     #0            ; set file counter = 0
             bne     30$
             iny
             bne     25$
-30$:        jsr     CLRCHN
-            rts     
+30$:        jmp     CLRCHN
 eof$:       jsr     CLRCHN
             lda     #0
             sta     zp:_Zp+0
