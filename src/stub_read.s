@@ -9,7 +9,7 @@ READST:     .equlab 0xffb7
 CLRCHN:     .equlab 0xffcc
 
             .section code
-            .public _Stub_read
+            .pubweak _Stub_read
 _Stub_read: ldx     zp:_Zp+0
             beq     start$        ; stdin
             cpx     #3            ; test for stdout/stderr
