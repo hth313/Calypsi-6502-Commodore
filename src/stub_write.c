@@ -10,31 +10,41 @@
 size_t _Stub_write (int fd, const void *buf, size_t count) {
   const char *p = buf;
   size_t n = 0;
+  bool text = true;
 
   switch (fd) {
-  default:
-    if (((1 << (fd - 3)) & __fd_resources) == 0) {
+  default: {
+    uint16_t resource_bit = 1 << (fd - 3);
+    if ((resource_bit & __fd_resources) == 0) {
       goto bad;
     }
     // prepare for output
     if (__kernel_call_failed(__chkout(fd))) {
       return -EIO;
     }
-    // fall through
+    if ((resource_bit & __fd_binary)) {
+      text = false;
+    }
+  }
+  // fall through
   case 2:
   case 1: {
     char c;
     while (count) {
-      CHROUT(*p);
+      c = *p;
+      if (text && c == '\n') {
+	c = '\r';
+      }
+      CHROUT(c);
       n += 1;
       p += 1;
       count -= 1;
     }
     break;
-    }
-    case 0:
-    bad:
-      return -EBADF;
+  }
+  case 0:
+  bad:
+    return -EBADF;
   }
   if (__read_status()) {
     CLRCHN();

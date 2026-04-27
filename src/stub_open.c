@@ -7,7 +7,8 @@
 #include <errno.h>
 #include "lib.h"
 
-uint8_t __fd_resources;
+uint16_t __fd_resources;
+uint16_t __fd_binary;   // bit set if opened as O_BINARY (untranslated mode)
 
 int _Stub_open(const char *path, int oflag, ...) {
   if (__fd_resources == 255) {
@@ -46,6 +47,9 @@ int _Stub_open(const char *path, int oflag, ...) {
     }
 
     __fd_resources |= r;
+    if ((oflag & O_BINARY)) {
+      __fd_binary |= r;
+    }
     __set_logical_file(fd, device, fd);
     __set_filename(path, strlen(path));
     if (__kernel_call_failed(__open())) {
